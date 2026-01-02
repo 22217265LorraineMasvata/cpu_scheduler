@@ -1,6 +1,18 @@
  #include <stdio.h>
  #include <stdlib.h>
 
+/* ===== STRUCT DEFINITIONS ===== */
+typedef struct Process {
+    int burst_time;        // CPU execution time
+    int priority;          // Priority level
+    int arrival_time;      // Time process arrives
+    int queue_id;          // Which queue it belongs to
+    int waiting_time;      // Time spent waiting
+    struct Process *next;  // Pointer to next process (linked list)
+} Process;
+
+/* ===== FUNCTION PROTOTYPES (optional for now) ===== */
+
 int main(int argc, char *argv[])
 {
 FILE *inputFile;
