@@ -3,6 +3,8 @@
 
 int main(int argc, char *argv[])
 {
+FILE *inputFile;
+FILE *outputFile;
  //check if correct number of arguments
 if (argc != 3)
 {
@@ -10,9 +12,18 @@ if (argc != 3)
 argv[0]);
    return 1;
 }
-  //open input file (argv[1])
-  //open output file (argv[2])
+//open input file (argv[1]) and output file (argv[2])
+inputFile = fopen(argv[1], "r");
+outputFile = fopen(argv[2], "w");
+
+if (inputFile == NULL || outputFile == NULL) {
+    printf("Error opening file\n");
+    return 1;
+}
   //process data
+ fclose(inputFile);
+ fclose(outputFile);
+
   //close files
   return 0;
 }
