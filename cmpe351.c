@@ -14,77 +14,71 @@ typedef struct Process {
 int main(int argc, char *argv[])
 {
 
-int burst, priority, arrival, queue;
+    FILE *inputFile, *outputFile;
+    int burst, priority, arrival, queue;
 
-Process *head = NULL;
-Process *tail = NULL;
+    Process *head = NULL;
+    Process *tail = NULL;
 
-FILE *inputFile;
-FILE *outputFile;
 
-//check if correct number of arguments
-if (argc != 3)
-{
-   printf("Usage: %s input_file.txt output_file.txt\n",
-argv[0]);
-   return 1;
-}
-
-//open input file (argv[1]) and output file (argv[2])
-inputFile = fopen(argv[1], "r");
-outputFile = fopen(argv[2], "w");
-
-if (inputFile == NULL || outputFile == NULL) 
-{
-    printf("Error opening file\n");
-    return 1;
-}
-
-//process data
-while (fscanf(inputFile, "%d:%d:%d:%d",&burst, &priority, &arrival, &queue) == 4) 
-{
-
-    Process *newProcess = (Process *)malloc(sizeof(Process));
-      if (newProcess == NULL)
-   {
-       printf("Memory allocation failed\n");
+    //check if correct number of arguments
+    if (argc != 3)
+    {
+       printf("Usage: %s input_file.txt output_file.txt\n", argv[0]);
        return 1;
+    }
+
+    //open input file (argv[1]) and output file (argv[2])
+    inputFile = fopen(argv[1], "r");
+    outputFile = fopen(argv[2], "w");
+
+   if (inputFile == NULL || outputFile == NULL)
+   {
+      printf("Error opening file\n");
+      return 1;
    }
 
-  newProcess->burst_time = burst;
-  newProcess->priority = priority;
-  newProcess->arrival_time = arrival;
-  newProcess->queue_id = queue;
-  newProcess->waiting_time = 0;
-  newProcess->next = NULL;
+   //Read process from input file
+   while (fscanf(inputFile, "%d:%d:%d:%d",&burst, &priority, &arrival, &queue) == 4) 
+   {
+
+      Process *newProcess = (Process *)malloc(sizeof(Process));
+      if (newProcess == NULL)
+      {
+        printf("Memory allocation failed\n");
+        return 1;
+      }
+
+      newProcess->burst_time = burst;
+      newProcess->priority = priority;
+      newProcess->arrival_time = arrival;
+      newProcess->queue_id = queue;
+      newProcess->waiting_time = 0;
+      newProcess->next = NULL;
 
       if (head == NULL)
-   {
+      {
         head = newProcess;
         tail = newProcess;
-   }
+      }
 
-    else
-   {
+     else
+     {
         tail->next = newProcess;
         tail = newProcess;
+     }
+
+     //Temporary debug output
+     printf("BT=%d P=%d AT=%d Q=%d\n", burst, priority, arrival, queue);
+     fprintf(outputFile, "BT=%d P=%d AT=%d Q=%d\n", burst, priority, arrival, queue);
+
    }
 
-}
-//testing for correctness
-Process *temp = head;
-while (temp != NULL) {
-    printf("BT=%d P=%d AT=%d Q=%d\n",
-           temp->burst_time,
-           temp->priority,
-           temp->arrival_time,
-           temp->queue_id);
-    temp = temp->next;
-}
 
-//close files
-fclose (inputFile);
-fclose (outputFile);
 
-  return 0;
+   //close files
+   fclose (inputFile);
+   fclose (outputFile);
+
+   return 0;
 }
